@@ -1,0 +1,124 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>How Many Cities</title>
+
+    <!-- Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/style.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="description" content="How many deaths are too many?">
+    <meta name="keywords" content="covid,death toll, cities">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->   
+    <link href="assets/favicon.ico" rel="shortcut icon"/>
+
+  </head>
+
+  <!-- Thanks for looking at my source code! If you'd like to know more about my skills and qualifications, please check my portfolio out at https://tyler.cloud. -->
+
+  <body>
+    
+    <h1 id="headline">So many people have died in the US from Covid-19.</h1>
+    <h1 id="city"></h1>
+
+    </div>
+
+    <iframe id="map" width="90%" height="40%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="" style="border: 1px solid black"></iframe><br/>
+
+    <h2><a href="https://www.cdc.gov/coronavirus/2019-ncov/prevent-getting-sick/prevention.html">Learn how to protect yourself.</a></h2>
+
+    <form action="https://www.paypal.com/donate" method="post" target="_top">
+      <input type="hidden" name="cmd" value="_donations" />
+      <input type="hidden" name="business" value="4HFN3TW6PAE7L" />
+      <input type="hidden" name="currency_code" value="USD" />
+      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" width="100px" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+      <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+    </form>      
+    <small style="text-align: center; display: block;">Powered by <a href="https://www.tyler.cloud" target="_new">tyler.cloud</a></small>
+
+  </body>
+
+  <script>
+    // get Covid stats
+    var stats = [];
+    var death = -1;
+
+    $.ajax({
+      url: 'https://api.covidtracking.com/v1/us/current.json',
+      type: 'get',
+      success: function(response) 
+      { 
+        stats = response;
+        death = stats[0].death;
+
+        document.getElementById("headline").innerHTML = stats[0].death.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ` people have died in the US from Covid-19.
+        <br>
+        This is like killing the entire population of`;
+
+      },
+      error: function(response){
+        console.log("error: " + response);
+      }
+    });
+
+    // Grab populations
+    var url = 'https://public.opendatasoft.com/api/records/1.0/search/?dataset=geonames-all-cities-with-a-population-1000&q=&rows=200&sort=population&facet=timezone&facet=country&refine.country=United+States';
+
+    // fetch(url)
+    //   .then(function(response) {
+    //     console.log(response.body);
+    //   });
+
+      $.ajax({
+      url: url,
+      type: 'get',
+      success: function(response) 
+      { 
+        var previousRecord = [];
+
+        for(var i=response.records.length-1; i>=0; i--)
+        {
+          var record = response.records[i].fields;
+
+          if(record.population > death)
+          {
+
+            var city = "";
+            if(record.population - death > death - previousRecord.population)
+            {
+              city = previousRecord;
+            }
+            else
+            {
+              city = record;
+            }
+
+            document.getElementById("city").innerHTML = document.getElementById("city").innerHTML = city.name + ", " + city.admin1_code + "<font color=white>.";
+
+            var boundaries = {
+              left: city.coordinates[1] - .1,
+              right: city.coordinates[1] + .1,
+              top: city.coordinates[0] + .1,
+              bottom: city.coordinates[0] - .1
+            };
+            
+            document.getElementById("map").src = "https://www.openstreetmap.org/export/embed.html?bbox=" + boundaries.left + "%2C" + boundaries.bottom + "%2C" + boundaries.right + "%2C" + boundaries.top + "&amp;layer=mapnik";
+            break;
+          }
+
+          previousRecord = record;
+        }
+      },
+      error: function(response){
+        console.log("error: " + response);
+      }
+    });
+
+  </script>
+</html>

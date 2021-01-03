@@ -1,0 +1,103 @@
+/* GLOBAL */
+
+    html {
+        /* box-sizing: border-box; */
+        background: #1a1a1a;
+      }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        text-decoration: none;
+    }
+
+    @font-face {
+      font-family: 'productSans';
+      src: url('productSans.ttf');
+    }
+
+    @font-face {
+      font-family: 'light';
+      src: url('light.ttf');
+    }
+
+    body {
+        font-family: "light", -apple-system, BlinkMacSystemFont, "avenir next", avenir, "helvetica neue", helvetica, ubuntu, roboto, noto, "segoe ui", arial, sans-serif;
+        width: 100%;
+        color: #fff;
+    }
+
+/* Body */
+
+    h1, h2, #city {
+      font-size: 44px;
+      font-weight: normal;
+      text-align: center;
+    }
+
+    #headline {
+      padding-top: 5%;
+    }
+
+    #city {
+      color: #ff867c;
+    }
+
+    iframe {
+      display:block;
+      margin: auto;
+    }
+
+    h2 a {
+      color: #fff;
+      text-decoration: none;
+      border: 2px solid transparent;
+      border-bottom: 3px #236f92 dashed;
+      transition: font 0.2s ease;
+    }
+
+    h2 a:hover {
+      background: #333;
+      border-bottom: 0px;
+      border: 2px solid #fff;
+    }
+
+    small a {
+      color: #fff;
+      text-decoration: none;
+      border: 2px solid transparent;
+      border-bottom: 2px #236f92 solid;
+      transition: font 0.2s ease;
+    }
+
+    small a:hover {
+      background: #333;
+      border-bottom: 0px;
+      border: 2px solid #fff;
+    }
+
+    form {
+      text-align: center;
+      margin-top: 10%;
+    }
+
+/* Mobile */
+
+    @media screen and (max-width: 999px) {
+
+      #headline {
+        font-size: 26px;
+        padding: 10px;
+        margin-top: 20px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+    }
